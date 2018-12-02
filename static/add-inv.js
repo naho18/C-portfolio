@@ -2,14 +2,13 @@
 "use strict";
 
     function addNewInv(results) {
-        // display investment by date
-        console.log('hello');
-        console.log(results);
-
+        console.log(results);        
+        window.location.reload();
     }
 
     function addInv(evt) {
         evt.preventDefault();
+
         let formInputs = {
             "company-name": $("#company-name").val(),
             "quantity": $("#quantity").val(),
@@ -17,7 +16,7 @@
             "date": $("#inv-date").val(),
         };
 
-        $.post("/add-investment.json", 
+        $.get("/add-investment.json", 
                formInputs,
                addNewInv);
     }

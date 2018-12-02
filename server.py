@@ -61,7 +61,6 @@ def register_user():
 def login_check():
     """Validates user info, takes user to home page"""
 
-    # Get user email & password from form
     user_email = request.form['email']
     user_password = request.form['password']
 
@@ -102,13 +101,6 @@ def display_homepage(user_id):
 
     user_inv = (UserInv.query.filter_by(user_id=user_id)).all()
 
-    # current_inv = []
-
-    # list of all user's investments 
-    # for item in user_inv:
-    #     current_inv.append({'company': item.inv.company_name, 'quantity': 
-    #         item.inv.quantity, 'cost': item.inv.cost})
-
     return render_template('user-homepage.html',
                             user_inv=user_inv)
 
@@ -118,7 +110,6 @@ def find_by_date():
     """Returns the state of all investments on a given date"""
 
     input_date = request.args.get('date')
-    print 'input date', input_date
     
     user_id = session['user']
     user_inv = (UserInv.query.filter_by(user_id=user_id)).all()
@@ -127,41 +118,71 @@ def find_by_date():
 
     for item in user_inv:    
         if str(item.inv.date_of_investment) == input_date:
-            inv_by_date.append({'company': item.inv.company_name, 'quantity': 
-                item.inv.quantity, 'cost': item.inv.cost})
-
-    print 'inv by date', inv_by_date
-
-    # inv_results = str(inv_by_date)
+            inv_by_date.append({"company": item.inv.company_name, 
+                                "quantity": item.inv.quantity, 
+                                "cost": item.inv.cost})
+    print inv_by_date
 
     return jsonify(inv_by_date)
 
 
-@app.route('/add-investment.json', methods=['POST'])
+@app.route('/add-investment.json')
 def add_investment():
     """Adds investment and updates database"""
 
-    company_name = request.form['company-name']
+    company_name = request.args.get('company-name')
     date_of_entry = datetime.datetime.today().strftime('%Y-%m-%d')
     
-    input_quantity = request.form['quantity']
-    # quantity = int(str(input_quantity).replace(',', ''))
+    input_quantity = request.args.get('quantity')
+    quantity = int(str(input_quantity).replace(',', ''))
     
-    input_cost = request.form['cost']
-    # cost = int(str(input_cost).replace(',', ''))
-    date_of_investment = request.form['inv-date']
+    input_cost = request.args.get('cost')
+    cost = int(str(input_cost).replace(',', ''))
 
-    print 'doi ', date_of_investment
+    date_of_investment = request.args.get('date')
 
-    # new_inv = Investment(date_of_investment=date_of_investment, 
-    #     company_name=company_name, quantity=quantity, cost=cost)
+    new_inv = Investment(date_of_entry=date_of_entry, 
+                        date_of_investment=date_of_investment,
+                        company_name=company_name, 
+                        quantity=quantity, 
+                        cost=cost)
     
-    # db.session.add(new_inv)
-    # db.session.commit()
+    db.session.add(new_inv)
+    db.session.commit()
+
+    user_id = session['user']
+    new_inv_id = new_inv.inv_id
+
+
+    new_userinv = UserInv(inv_id=new_inv_id,
+                            user_id=user_id)
+    db.session.add(new_userinv)
+    db.session.commit()
 
     return jsonify('investment added!')
 
 
+@app.route('/update-investment.json')
+def update_investment():
+    """Updates investment in database"""
+
+    user_id = session['user']
+    inv_id = request.args.get('update-inv')
+    input_quantity = request.args.get('quantity')
+    quantity = int(str(input_quantity).replace(',', ''))
+    input_cost = request.args.get('cost')
+    cost = int(str(input_cost).replace(',', ''))
+    date_of_investment = request.args.get('inv-date')
+
+    # Query selected investment to update
+    updated_inv = Investment.query.get(inv_id)
+    updated_inv.quantity = quantity
+    updated_inv.cost = cost
+    updated_inv.date_of_investment = date_of_investment
+
+    db.session.commit()
+
+    return redirect('/user-%s' % user_id)
 
 ##############################################################################
 

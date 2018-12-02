@@ -15,7 +15,7 @@
                   <th scope="col">#</th>
                   <th scope="col">Date</th>
                   <th scope="col">Company</th>
-                  <th scope="col">Qunatity</th>
+                  <th scope="col">Quantity</th>
                   <th scope="col">Cost</th>
                 </tr>
               </thead>
@@ -39,7 +39,6 @@
       
 
       <!-- search, find investment by date -->
-
         
         <div id='search-inv'>
           <form id='search-inv-form'>
@@ -52,7 +51,6 @@
         <br><br>
         <div id='search-results'>
           Search results: <br>
-
         </div>
 
         <script type=text/javascript src="{{
@@ -61,21 +59,40 @@
 
 
       <!-- add investment -->
-        <div id='add-inv'>
-          <form id='add-inv-form'>
-            Company name: <input type="text" id='company-name'><br>
-            Quantity: <input type="text" id='quantity'><br>
-            Cost: <input type="text" id='cost'><br>
-            Date (YYYY-MM-DD): <input type="text" id="invdate"><br>
-            <input id='add-inv-btn' type='submit' value='submit'>
-          </form>
-        </div>
+
+      <div id='add-inv'>
+        <form id='add-inv-form'>
+          Company name: <input type="text" id="company-name"><br>
+          Quantity: <input type="text" id="quantity"><br>
+          Cost: <input type="text" id="cost"><br>
+          Date (YYYY-MM-DD): <input type="text" id="inv-date"><br>
+          <input id="add-inv-btn" type="submit" value="submit">
+        </form>
+      </div>
 
         <script type=text/javascript src="{{
           url_for('static', filename='add-inv.js') }}"></script>
+          <br><br>
 
 
       <!-- update -->
+
+      <div id="select-inv">
+      <form action='/update-investment.json' id="select-inv-form"> 
+        Company name: 
+          <select id="update-inv" name="update-inv">
+            {% for item in user_inv %}
+                <option value="{{item.inv.inv_id}}">{{ item.inv.company_name }}</option>
+            {% endfor %}
+          </select>
+          <br>
+          Quantity: <input type="text" id="quantity" name="quantity"><br>
+          Cost: <input type="text" id="cost" name="cost"><br>
+          Date (YYYY-MM-DD): <input type="text" id="inv-date" name="inv-date"><br> 
+        <input id='select-inv-btn' type='submit' value='update'>
+      </form>
+      </div>
+      <br>
 
 
 {% endblock %}
