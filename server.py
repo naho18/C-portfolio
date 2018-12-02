@@ -6,7 +6,8 @@ from flask_debugtoolbar import DebugToolbarExtension
 
 from model import connect_to_db, db, User, Investment, UserInv
 
-from datetime import datetime
+import datetime
+import string
 from jinja2 import StrictUndefined
 
 import unirest
@@ -100,32 +101,66 @@ def display_homepage(user_id):
     """Show current investments in Portfolio"""
 
     user_inv = (UserInv.query.filter_by(user_id=user_id)).all()
-    print user_inv
 
-    current_inv = []
+    # current_inv = []
 
-    for item in user_inv:
-        current_inv.append({'company': item.inv.company_name, 'quantity': 
-            item.inv.quantity, 'cost': item.inv.cost})
+    # list of all user's investments 
+    # for item in user_inv:
+    #     current_inv.append({'company': item.inv.company_name, 'quantity': 
+    #         item.inv.quantity, 'cost': item.inv.cost})
 
-    return jsonify(current_inv)
+    return render_template('user-homepage.html',
+                            user_inv=user_inv)
 
 
-@app.route('/investments?date=<given_date>')
-def find_by_date(given_date):
+@app.route('/investments-by-date.json')
+def find_by_date():
     """Returns the state of all investments on a given date"""
 
+    input_date = request.args.get('date')
+    print 'input date', input_date
+    
     user_id = session['user']
     user_inv = (UserInv.query.filter_by(user_id=user_id)).all()
 
     inv_by_date = []
 
     for item in user_inv:    
-        if str(item.inv.date_of_investment) == given_date:
+        if str(item.inv.date_of_investment) == input_date:
             inv_by_date.append({'company': item.inv.company_name, 'quantity': 
                 item.inv.quantity, 'cost': item.inv.cost})
 
-    return jsonify(current_inv)
+    print 'inv by date', inv_by_date
+
+    # inv_results = str(inv_by_date)
+
+    return jsonify(inv_by_date)
+
+
+@app.route('/add-investment.json', methods=['POST'])
+def add_investment():
+    """Adds investment and updates database"""
+
+    company_name = request.form['company-name']
+    date_of_entry = datetime.datetime.today().strftime('%Y-%m-%d')
+    
+    input_quantity = request.form['quantity']
+    # quantity = int(str(input_quantity).replace(',', ''))
+    
+    input_cost = request.form['cost']
+    # cost = int(str(input_cost).replace(',', ''))
+    date_of_investment = request.form['inv-date']
+
+    print 'doi ', date_of_investment
+
+    # new_inv = Investment(date_of_investment=date_of_investment, 
+    #     company_name=company_name, quantity=quantity, cost=cost)
+    
+    # db.session.add(new_inv)
+    # db.session.commit()
+
+    return jsonify('investment added!')
+
 
 
 ##############################################################################
