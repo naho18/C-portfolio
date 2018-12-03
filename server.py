@@ -21,7 +21,7 @@ from sqlalchemy import update
 app = Flask(__name__)
 
 # create secret key
-app.secret_key = os.environ['FLASK_SECRET_KEY']
+app.secret_key = "examplepassword"
 
 # raises jinja underfined error
 app.jinja_env.undefined = StrictUndefined
