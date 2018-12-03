@@ -1,24 +1,23 @@
 {% extends 'base.html' %}
+  
+{% block styles %}
+  <link href="static/homepage.css" rel="stylesheet">
+{% endblock %}
 
 
 {% block content %}
-
+<div class="content">
   <div id="homepage" class="container-fluid">
       <div class="row">
           <div class="mx-auto">
-            
-            <h1>C-Portfolio</h1>
-              
             <center>
+              <h1>C-Portfolio</h1>
               <button id='login' class="btn inline">Log In</button>
               <button id='register' class="btn inline">Register</button>
-            
-                <div id='homepageForm'>
-                  <!-- login/register forms -->
-                </div>
-
+              <div id='homepageForm'>
+                <!-- login/register forms -->
+              </div>
             </center>
-
           </div>
       </div>
   </div>
@@ -27,5 +26,5 @@
       url_for('static', filename='login-join.js') }}"></script>
     
     <script src="http://code.jquery.com/jquery.js"></script>
-
+</div>
 {% endblock %}

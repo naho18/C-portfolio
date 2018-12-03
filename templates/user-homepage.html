@@ -1,14 +1,33 @@
 {% extends 'base.html' %}
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 {% block content %}
+<div class="content">
 
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">C-Portfolio</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+    <div class="navbar-nav">
+      <ul class="navbar-nav ml-auto">
+        <a class="nav-item nav-link" href="#all-investments">Portfolio 
+        <a class="nav-item nav-link" href="#search-inv">Search</a>
+        <a class="nav-item nav-link" href="#add-inv">Add</a>
+        <a class="nav-item nav-link" href="#select-inv">Update</a>
+        <a class="nav-item nav-link" href="/logout">Log Out</a>
+      </ul>
+    </div>
+  </div>
+  </nav>
+
+  <br>
 
       <!-- home, display all investments -->          
           <div id='all-investments'>
-
+            <h2>Investment Portfolio</h2><br>
             <table class="table table-hover">
               <thead>
                 <tr>
@@ -39,7 +58,8 @@
       
 
       <!-- search, find investment by date -->
-        
+        <h2>Find investment by date</h2><br>
+
         <div id='search-inv'>
           <form id='search-inv-form'>
             Please select date:<br>
@@ -59,7 +79,7 @@
 
 
       <!-- add investment -->
-
+        <h2>Add investments</h2><br>
       <div id='add-inv'>
         <form id='add-inv-form'>
           Company name: <input type="text" id="company-name"><br>
@@ -76,7 +96,7 @@
 
 
       <!-- update -->
-
+        <h2>Update investments</h2><br>
       <div id="select-inv">
       <form action='/update-investment.json' id="select-inv-form"> 
         Company name: 
@@ -93,6 +113,8 @@
       </form>
       </div>
       <br>
+      <br>
+      <br>
 
-
+</div>
 {% endblock %}
